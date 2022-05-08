@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/tv_treeMeasure"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/tv_measure"
+        android:gravity="center"
+        android:text="@string/treefactor"
+        android:textColor="@color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height_120"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_treeHeight"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height_120"
+            android:layout_weight="1"
+            android:background="@drawable/btn_measure"
+            android:drawableTop="@drawable/icon_height"
+            android:paddingTop="@dimen/spacing_35"
+            android:text="@string/tree_height"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btn_treeDBH"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height_120"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_measure"
+            android:drawableTop="@drawable/icon_dbh"
+            android:paddingTop="@dimen/spacing_35"
+            android:text="@string/tree_crown"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btn_treeVolume"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height_120"
+            android:layout_weight="1"
+            android:background="@drawable/btn_measure"
+            android:drawableTop="@drawable/icon_volume"
+            android:paddingTop="35dp"
+            android:text="@string/tree_volume"
+            android:textColor="@color/black" />
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_treeMore"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="@dimen/button_height_120"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@drawable/btn_measure"-->
+<!--            android:drawableTop="@drawable/icon_more"-->
+<!--            android:paddingTop="35dp"-->
+<!--            android:text="@string/developing"-->
+<!--            android:textColor="@color/black" />-->
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_insect"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/tv_measure"
+        android:gravity="center"
+        android:text="@string/pests_Identify"
+        android:textColor="@color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        android:textColor="@color/black">
+
+        <Button
+            android:id="@+id/btn_insectRec"
+            style="@style/CardView.Light"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_measure"
+            android:drawableTop="@drawable/icon_insect"
+            android:paddingTop="35dp"
+            android:text="@string/pests_Identify"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btn_insectPre"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_measure"
+            android:drawableTop="@drawable/icon_pre"
+            android:paddingTop="35dp"
+            android:text="@string/pests_Prevention"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btn_insectMore"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_measure"
+            android:drawableTop="@drawable/icon_more"
+            android:paddingTop="35dp"
+            android:text="@string/developing"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_species"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/tv_measure"
+        android:gravity="center"
+        android:text="@string/tree_Identify"
+        android:textColor="@color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_speciesRec"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_measure"
+            android:drawableTop="@drawable/icon_species"
+            android:paddingTop="35dp"
+            android:text="@string/tree_Identify"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btn_speciesFeature"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_measure"
+            android:drawableTop="@drawable/icon_feature"
+            android:paddingTop="35dp"
+            android:text="@string/tree_Encyclopedia"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btn_speciesMore"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_measure"
+            android:drawableTop="@drawable/icon_more"
+            android:paddingTop="35dp"
+            android:text="@string/developing"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:orientation="vertical">-->
+
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="vertical">-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/imageView"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="200dp"-->
+    <!--            android:layout_gravity="center_horizontal"-->
+    <!--            android:layout_marginTop="15dp"-->
+    <!--            android:adjustViewBounds="true"-->
+    <!--            android:maxHeight="200dp" />-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:gravity="center"-->
+    <!--            android:orientation="horizontal">-->
+
+    <!--            <Button-->
+    <!--                android:id="@+id/takePhotoBtn"-->
+    <!--                android:layout_width="150dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:text="相机" />-->
+
+    <!--            <Button-->
+    <!--                android:id="@+id/fromAlbumBtn"-->
+    <!--                android:layout_width="150dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:text="相册" />-->
+
+    <!--        </LinearLayout>-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="20dp"-->
+    <!--            android:orientation="horizontal">-->
+
+    <!--            <Button-->
+    <!--                android:id="@+id/accelerometer"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:text="加速度" />-->
+
+    <!--            <Button-->
+    <!--                android:id="@+id/gyroscope"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:text="陀螺仪" />-->
+
+    <!--            <Button-->
+    <!--                android:id="@+id/orientation"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:text="方向" />-->
+
+    <!--        </LinearLayout>-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/sensorText"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="0"-->
+    <!--            android:textSize="30dp" />-->
+
+
+    <!--    </LinearLayout>-->
+
+
+    <!--    <Button-->
+    <!--        android:id="@+id/meature"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="bottom"-->
+    <!--        android:layout_marginBottom="0dp"-->
+    <!--        android:text="测 量" />-->
+
+
+    <!--</LinearLayout>-->

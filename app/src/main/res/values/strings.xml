@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">TreeMeasure</string>
+    <string name="treefactor">树木因子测量</string>
+    <string name="tree_height">树高/胸径</string>
+    <string name="tree_weigh">胸径</string>
+    <string name="tree_crown">树冠</string>
+    <string name="tree_volume">材积</string>
+    <string name="developing">正在开发</string>
+    <string name="pests_Identify">病虫害识别</string>
+    <string name="pests_Prevention">病虫害防治</string>
+    <string name="tree_Identify">树种识别</string>
+    <string name="tree_Encyclopedia">树种百科</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="capture">Capture</string>
+
+    <!--    树高Activity    -->
+    <string name="tree_name">名称：</string>
+    <string name="hint_name">未命名0</string>
+    <string name="phone_angle">手机倾斜角度：</string>
+    <string name="slope_angle">坡面倾斜角度：</string>
+    <string name="lower_tilt_angle">下倾斜角</string>
+    <string name="top_tilt_angle">上倾斜角</string>
+    <string name="phone_height">手机高度：</string>
+    <string name="shooting_date">拍摄日期：</string>
+    <string name="tree_height_value">树高测量值：</string>
+    <string name="tree_DBH_value">胸径测量值：</string>
+    <string name="btn_shooting">拍摄</string>
+    <string name="btn_derive_data">导出数据</string>
+    <string name="btn_calculate">计算树高</string>
+    <string name="btn_recalculate">重新计算</string>
+    <string name="survey_record">测量记录</string>
+    <string name="text_tree_height">树高：</string>
+    <string name="text_tree_DBH">胸径：</string>
+
+    <string name="tree_crown_value">平均测量值：</string>
+
+
+    <!--    ImageSaveFragment    -->
+    <string name="btn_confirm">确  定</string>
+    <string name="btn_cancel">取  消</string>
+
+
+</resources>
