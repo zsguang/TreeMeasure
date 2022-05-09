@@ -590,7 +590,7 @@ class CameraFragment : Fragment(), SensorEventListener, NavArgs {
 
     override fun onStart() {
         super.onStart()
-        // 注册加速度传感器
+        // 注销加速度传感器
         systemService.registerListener(
             this, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL
         )
