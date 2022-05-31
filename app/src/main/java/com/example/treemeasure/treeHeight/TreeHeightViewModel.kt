@@ -22,7 +22,7 @@ class TreeHeightViewModel : ViewModel() {
 
     init {
         getTreeHeightList()
-        Log.i("TreeHeightViewModel", "ClothesReservation Model start")
+        Log.i("TreeHeightViewModel", "TreeHeightViewModel start")
     }
 
     private fun getTreeHeightList() {

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.example.treemeasure.Dao.AppDatabase
 import com.example.treemeasure.databinding.ActivityMainBinding
+import com.example.treemeasure.treeCrown.TreeCrownActivity
 import com.example.treemeasure.treeHeight.TreeHeightActivity
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //        dbHelper.readableDatabase
 
         binding.btnTreeHeight.setOnClickListener(this)
+        binding.btnTreeCrown.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
@@ -29,10 +31,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_treeHeight -> {
                 startActivity(Intent(this, TreeHeightActivity::class.java))
             }
-            R.id.btn_treeDBH -> {
-                val treeHeightDao = AppDatabase.getDatabase(MyApplication.context).treeHeightDao()
-                println(treeHeightDao.deleteById("1"))
-
+            R.id.btn_treeCrown -> {
+                startActivity(Intent(this, TreeCrownActivity::class.java))
             }
         }
     }

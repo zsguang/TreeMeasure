@@ -2,33 +2,33 @@ package com.example.treemeasure.treeHeight
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
-import android.view.View
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.treemeasure.CameraActivity
+import com.example.treemeasure.cameras.CameraActivity
 import com.example.treemeasure.Dao.TreeHeight
 import com.example.treemeasure.MyApplication
 import com.example.treemeasure.R
+import com.example.treemeasure.data.CameraType
 import com.example.treemeasure.databinding.ActivityTreeHeightBinding
 import kotlinx.android.synthetic.main.activity_tree_height.*
 
 class TreeHeightActivity : AppCompatActivity() {
+    private val TAG = "TreeHeightActivity"
 
     private lateinit var binding: ActivityTreeHeightBinding
 
     private lateinit var viewModel: TreeHeightViewModel
 
+    /** recyclerView的item数据 */
     private var treeHeightList: MutableList<TreeHeight> = mutableListOf()
 
     private lateinit var adapter: TreeHeightAdapter
@@ -40,11 +40,11 @@ class TreeHeightActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(TreeHeightViewModel::class.java)
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        // item的高度固定不变，设置这个属性能提高性能
+        binding.recyclerView.setHasFixedSize(true)
         adapter = TreeHeightAdapter(treeHeightList, handler)
         binding.recyclerView.adapter = adapter
-
 
         viewModel.treeHeightList.observe(this, Observer {
             treeHeightList.clear()
@@ -54,7 +54,10 @@ class TreeHeightActivity : AppCompatActivity() {
         })
 
         binding.btnShooting.setOnClickListener {
-            startActivity(Intent(this, CameraActivity::class.java))
+            // 启动相机，并表明用来拍摄树高
+            val intend = Intent(this, CameraActivity::class.java)
+            intend.putExtra("cameraType", CameraType.TreeHeightType)
+            startActivity(intend)
         }
     }
 

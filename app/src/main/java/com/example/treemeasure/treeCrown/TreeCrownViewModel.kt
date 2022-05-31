@@ -24,7 +24,7 @@ class TreeCrownViewModel : ViewModel() {
 
     init {
         getTreeCrownList()
-        Log.i("TreeHeightViewModel", "ClothesReservation Model start")
+        Log.i("TreeCrownViewModel", "TreeCrownViewModel start")
     }
 
     private fun getTreeCrownList() {

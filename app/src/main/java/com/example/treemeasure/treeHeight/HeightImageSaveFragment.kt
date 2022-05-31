@@ -1,4 +1,4 @@
-package com.example.treemeasure.fragments
+package com.example.treemeasure.treeHeight
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -33,7 +33,6 @@ import com.example.treemeasure.Dao.TreeHeightDao
 import com.example.treemeasure.MyApplication
 import com.example.treemeasure.R
 import com.example.treemeasure.databinding.FragmentImageSaveBinding
-import com.example.treemeasure.treeHeight.TreeHeightActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -45,12 +44,12 @@ import kotlin.math.max
 
 
 /**
- * 图片保存页面
+ * 保存树高胸径的图片和数据
  */
-class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener {
+class HeightImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener {
 
     /** AndroidX navigation arguments （Navigation代理） */
-    private val args: ImageSaveFragmentArgs by navArgs()
+    private val args: HeightImageSaveFragmentArgs by navArgs()
 
     private var _binding: FragmentImageSaveBinding? = null
     private val binding get() = _binding!!
@@ -75,14 +74,11 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
     /** 加速度传感器 */
     private val sensorAccelerometer: Sensor by lazy { systemService.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
 
-    /** 标记哪个按钮打开加速度传感器 */
+    /** 标记打开加速度传感器的按钮 */
     private var sensorAccessFlag: String = ""
 
     /**  图片路径  */
     private val filePath: String by lazy { args.filePath }
-
-    /** DatabaseHelper对象，用于对数据库进行操作 */
-//    private lateinit var dbHelper: DatabaseHelper
 
     /** 拍摄时间 */
     private lateinit var shootingDate: String
@@ -90,27 +86,33 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
     /** 图片是否已经保存成功 */
     private var saveSuccess: Boolean = false
 
-    /** 加载图片 */
-    private val INLOAD_IMAGE = 1
-
-    /** 设置默认名 */
-    private val EDITTREENAME_HINT = 2
+    /** DatabaseHe lper对象，用于对数据库进行操作 */
+    // private lateinit var dbHelper: DatabaseHelper
 
     /** ORM对象关系映像 数据访问对象 */
     private val treeHeightDao: TreeHeightDao by lazy {
         AppDatabase.getDatabase(MyApplication.context).treeHeightDao()
     }
 
+    /** 加载图片 */
+    private val INLOAD_IMAGE = 1
+
+    /** 设置默认名 */
+    private val EDIT_TREE_NAME_HINT = 2
+
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             // 在这里可以进行UI操作
             when (msg.what) {
                 INLOAD_IMAGE -> {
-                    binding.imageTree.setImageBitmap(decodeBitmap(msg.obj as ByteArray,
-                        msg.arg1,
-                        msg.arg2))
+                    binding.imageTree.setImageBitmap(
+                        decodeBitmap(
+                            msg.obj as ByteArray,
+                            msg.arg1,
+                            msg.arg2)
+                    )
                 }
-                EDITTREENAME_HINT -> {
+                EDIT_TREE_NAME_HINT -> {
                     binding.editTreeName.hint = "未命名" + msg.arg1.toString()
                 }
             }
@@ -131,32 +133,21 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
 //        cursor.close()
 //        db.close()
 
-//        binding.editTreeName.hint = "未命名" + treeHeightDao.getMaxId()
-        lifecycleScope.launch(Dispatchers.IO) {
-            val maxId: Int = treeHeightDao.getMaxId()
-            handler.sendMessage(Message().apply {
-                what = EDITTREENAME_HINT
-                arg1 = maxId
-            })
-        }
-
-//        binding.textLowerAngle.text = args.bottomAngleValue
-//        binding.textTopAngle.text = args.topAngleValue
         binding.textPhoneAngle.text = args.phoneAngleValue
         binding.btnConfirm.setOnClickListener(this)
         binding.btnCancle.setOnClickListener(this)
         binding.btnPhoneHeight.setOnClickListener(this)
         binding.btnSlopeAngle.setOnClickListener(this)
-
         shootingDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
         binding.textShootingDate.text = shootingDate
-
-
+        /* 异步更新editTreeName.hint 和 图片 */
         lifecycleScope.launch(Dispatchers.IO) {
+            val maxId: Int = treeHeightDao.getMaxId()
+            binding.editTreeName.hint = "未命名$maxId"
+
             // Load input image file
             val inputBuffer = loadInputBuffer()
-            Log.d("ImageSaveFragment", "loadInputBuffer() end")
-
+            Log.d("HeightImageSaveFragment", "loadInputBuffer() end")
             // Load the main JPEG image
             val message = Message().apply {
                 what = INLOAD_IMAGE
@@ -166,8 +157,6 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
             }
             handler.sendMessage(message)
         }
-
-//        binding.editPhoneHeight.setOn
     }
 
     override fun onCreateView(
@@ -187,8 +176,8 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
                 }
 
                 // 获取需要更改的文件名
-                var name: String = binding.editTreeName.text.toString()
-                if (name == "") name = binding.editTreeName.hint.toString()
+                var fileName: String = binding.editTreeName.text.toString()
+                if (fileName == "") fileName = binding.editTreeName.hint.toString()
 
                 // 找出照片路径
                 var length: Int = filePath.length
@@ -199,7 +188,7 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
                     }
                 }
                 // 形成更改后的完整文件路径
-                val newPath: String = filePath.substring(0, length + 1) + name + ".jpg"
+                val newPath: String = filePath.substring(0, length + 1) + fileName + ".jpg"
 
 //                var db = dbHelper.writableDatabase
 //                val cursor = db.rawQuery("select * from TreeHeight where name = '$name'", null)
@@ -210,18 +199,20 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
 //                    return
 //                }
 //                cursor.close()
+                // 检查该命名是否已存在
                 var checkTreeName: Int = 1
                 runBlocking {
-                    checkTreeName = treeHeightDao.checkTreeName(name)
+                    checkTreeName = treeHeightDao.checkTreeName(fileName)
                 }
-                if (checkTreeName != 0) {   //若文件名已存在，则保存失败
+                // 若文件名已存在，则保存失败
+                if (checkTreeName != 0) {
                     Toast.makeText(activity, "文件名字已存在！", Toast.LENGTH_SHORT).show()
                     return
                 }
-
+                // 保存数据到数据库中
                 runBlocking {
                     val data = TreeHeight(
-                        name,
+                        fileName,
                         args.phoneAngleValue,
                         binding.editSlopeAngle.text.toString(),
                         binding.editPhoneHeight.text.toString(),
@@ -279,33 +270,34 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
             /**   取消按钮事件   */
             R.id.btn_cancle -> {
                 // 删除照片
-                val file = File(filePath)
-                file.delete()
+                File(filePath).delete()
 
                 // 返回相机预览界面
                 Navigation.findNavController(requireActivity(), R.id.fragment_container)
-                    .navigate(ImageSaveFragmentDirections.actionImageSaveFragmentToCameraFragment(
-                        CameraCharacteristics.LENS_FACING_FRONT.toString(),
-                        ImageFormat.JPEG))
+                    .navigate(HeightImageSaveFragmentDirections.actionImageSaveFragmentToCameraFragment(
+                        CameraCharacteristics.LENS_FACING_FRONT.toString(), ImageFormat.JPEG)
+                    )
             }
 
             /** 手机高度测量 */
             R.id.btn_phoneHeight -> {
                 when (sensorAccessFlag) {
-                    // 如果正在测试坡面斜度，不触发
+                    /** 如果正在测试坡面斜度，不触发 */
                     "slopeAngle" -> {
                         Toast.makeText(activity, "正在进行坡面倾斜角度测量", Toast.LENGTH_SHORT).show()
                         return
                     }
-                    // 如果正在测试手机高度
+                    /** 如果正在测试手机高度 */
                     "phoneHeight" -> {
                         sensorAccessFlag = ""
                         // 注销加速度传感器
                         systemService.unregisterListener(this)
                     }
-                    // 未进行测试
+                    /** 未进行测试 */
                     "" -> {
                         sensorAccessFlag = "phoneHeight"
+                        speed = floatArrayOf(0f, 0f, 0f)
+                        shift = floatArrayOf(0f, 0f, 0f)
                         // 注册加速度传感器
                         systemService.registerListener(
                             this, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL
@@ -317,22 +309,20 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
             /** 坡面倾斜角度测量 */
             R.id.btn_slopeAngle -> {
                 when (sensorAccessFlag) {
-                    // 如果正在测试手机高度，不触发
+                    /** 如果正在测试手机高度，不触发 */
                     "phoneHeight" -> {
                         Toast.makeText(activity, "正在进行手机高度测量", Toast.LENGTH_SHORT).show()
                         return
                     }
-                    // 如果正在测试坡面斜度
+                    /** 如果正在测试坡面斜度 */
                     "slopeAngle" -> {
                         sensorAccessFlag = ""
                         // 注销加速度传感器
                         systemService.unregisterListener(this)
                     }
-                    // 未进行测试
+                    /** 未进行测试 */
                     "" -> {
                         sensorAccessFlag = "slopeAngle"
-                        speed = floatArrayOf(0f, 0f, 0f)
-                        shift = floatArrayOf(0f, 0f, 0f)
                         // 注册加速度传感器
                         systemService.registerListener(
                             this, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL
@@ -351,7 +341,6 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
      * 用于将输入文件读入字节数组的实用程序函数
      */
     private fun loadInputBuffer(): ByteArray {
-        Log.d("ImageSaveFragment", "loadInputBuffer()")
         val inputFile = File(args.filePath)
         return BufferedInputStream(inputFile.inputStream()).let { stream ->
             ByteArray(stream.available()).also {
@@ -363,12 +352,8 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
 
     /** Utility function used to decode a [Bitmap] from a byte array */
     private fun decodeBitmap(buffer: ByteArray, start: Int, length: Int): Bitmap {
-        Log.d("ImageSaveFragment", "BitmapFactory.decodeByteArray begin")
-
         // Load bitmap from given buffer
         val bitmap = BitmapFactory.decodeByteArray(buffer, start, length, bitmapOptions)
-
-        Log.d("ImageSaveFragment", "BitmapFactory.decodeByteArray end")
 
         // Transform bitmap orientation using provided metadata
         return Bitmap.createBitmap(
@@ -377,8 +362,7 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
     }
 
     companion object {
-
-        private val TAG = ImageViewerFragment::class.java.simpleName
+        private val TAG = HeightImageSaveFragment::class.java.simpleName
 
         /** Maximum size of [Bitmap] decoded */
         private const val DOWNSAMPLE_SIZE: Int = 1024  // 1MP
@@ -421,9 +405,10 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
         val z = event.values[2]
         when (event.sensor.type) {
             Sensor.TYPE_ACCELEROMETER -> {
-                if (sensorAccessFlag == "slopeAngle")
+                if (sensorAccessFlag == "slopeAngle") {
                     binding.editSlopeAngle.setText(
                         String.format("%.2f", Math.acos(z / 10.0) * 180 / Math.PI) + "°")
+                }
                 else if (sensorAccessFlag == "phoneHeight") {
                     speed[0] += x * 0.02f //速度分量，0.2f对应采样周期，单位s //normal延迟时间200ms
                     speed[1] += y * 0.02f
@@ -434,23 +419,6 @@ class ImageSaveFragment : Fragment(), View.OnClickListener, SensorEventListener 
                     shift[2] += speed[2] * 0.02f
 
                     binding.editPhoneHeight.setText(String.format("%.2f", shift[1]))
-//                    val accelerometer = """
-//                        acceleration
-//                        X：${event.values[0]}
-//                        Y:${event.values[1]}
-//                        Z:${event.values[2]}
-//
-//                        velocity
-//                        X：${speed[0]}
-//                        Y:${speed[1]}
-//                        Z:${speed[2]}
-//
-//                        shift
-//                        X：${shift[0]}
-//                        Y:${shift[1]}
-//                        Z:${shift[2]}
-//
-//                        """.trimIndent()
                 }
             }
         }

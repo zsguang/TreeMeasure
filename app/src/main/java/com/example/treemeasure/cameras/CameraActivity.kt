@@ -1,21 +1,32 @@
-package com.example.treemeasure
+package com.example.treemeasure.cameras
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.treemeasure.databinding.ActivityCameraBinding
 
 class CameraActivity : AppCompatActivity() {
 
     private lateinit var activityCameraBinding: ActivityCameraBinding
 
+    /** 启用相机的用途，如用来拍摄树高树冠或树冠或树种识别 */
+    lateinit var cameraType: String
+
+    /** 共享viewModel,主要用于在Fragment之间传递信息 */
+    lateinit var shareViewModel: CameraViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityCameraBinding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(activityCameraBinding.root)
 
-        Log.i("camera2", "CameraActivity onCreate()")
+        cameraType = intent.getStringExtra("cameraType").toString()
+
+        shareViewModel = ViewModelProvider(this).get(CameraViewModel::class.java)
+
+        Log.i("CameraActivity", "CameraActivity onCreate()")
     }
 
     override fun onResume() {

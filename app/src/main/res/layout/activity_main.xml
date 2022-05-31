@@ -38,7 +38,7 @@
             android:textColor="@color/black" />
 
         <Button
-            android:id="@+id/btn_treeDBH"
+            android:id="@+id/btn_treeCrown"
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height_120"
             android:layout_marginLeft="1dp"

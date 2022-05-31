@@ -1,49 +1,40 @@
 package com.example.treemeasure.treeHeight
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.net.Uri
 import android.os.Handler
-import android.os.Looper
 import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.treemeasure.Dao.TreeHeight
 import com.example.treemeasure.MyApplication
 import com.example.treemeasure.R
-import com.example.treemeasure.data.TreeHeightItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 class TreeHeightAdapter(private val treeList: List<TreeHeight>, val handler: Handler) :
     RecyclerView.Adapter<TreeHeightAdapter.ViewHolder>() {
 
     private val LOAD_TREEHEIGHT = 1
 
+    /** recyclerView当前点击的选项 */
+    private var currentPosition = -1
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val treeImage: ImageView = view.findViewById(R.id.treeImage)
         val treeName: TextView = view.findViewById(R.id.treeName)
         val treeHeightValue: TextView = view.findViewById(R.id.treeHeightValue)
         val treeDBHValue: TextView = view.findViewById(R.id.treeDBHValue)
-        val shootingDate: TextView = view.findViewById(R.id.shootingDate)
+        val shootingDate: TextView = view.findViewById(R.id.heightShootingDate)
     }
-
-    private var isClick = false
-    private var currentPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.record_item, parent, false)
+            .inflate(R.layout.tree_height_item, parent, false)
 
         val viewHolder = ViewHolder(view)
         viewHolder.itemView.setOnClickListener {
@@ -51,7 +42,7 @@ class TreeHeightAdapter(private val treeList: List<TreeHeight>, val handler: Han
             // 局部刷新
             notifyItemChanged(currentPosition)
             currentPosition = viewHolder.adapterPosition
-            notifyItemChanged(currentPosition)
+            notifyItemChanged(currentPosition)  // 局部刷新
 //            notifyDataSetChanged()    // 全局刷新
 
             handler.sendMessage(Message().apply {

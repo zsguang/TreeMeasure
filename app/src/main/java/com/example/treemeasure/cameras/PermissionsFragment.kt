@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.treemeasure.fragments
+package com.example.treemeasure.cameras
 
 import android.Manifest
 import android.content.Context

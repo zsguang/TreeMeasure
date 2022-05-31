@@ -6,6 +6,7 @@
 
     <!-- font sizes -->
     <dimen name="font_26">26sp</dimen>
+    <dimen name="font_24">24sp</dimen>
     <dimen name="font_22">22sp</dimen>
     <dimen name="font_20">20sp</dimen>
     <dimen name="font_18">18sp</dimen>
@@ -32,6 +33,7 @@
     <dimen name="button_height_32">32dp</dimen>
     <dimen name="button_width_100">100dp</dimen>
     <dimen name="item_height">90dp</dimen>
+    <dimen name="item_crown">120dp</dimen>
     <dimen name="image_width">80dp</dimen>
 
 </resources>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.treemeasure.fragments
+package com.example.treemeasure.cameras
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -44,7 +44,6 @@ import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
@@ -54,11 +53,11 @@ import androidx.navigation.NavArgs
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import com.example.treemeasure.CameraActivity
 import com.example.android.camera.utils.computeExifOrientation
 import com.example.android.camera.utils.getPreviewOutputSize
 import com.example.android.camera.utils.OrientationLiveData
 import com.example.treemeasure.R
+import com.example.treemeasure.data.CameraType
 import com.example.treemeasure.databinding.FragmentCameraBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -81,8 +80,9 @@ class CameraFragment : Fragment(), SensorEventListener, NavArgs {
 
     /** Android ViewBinding */
     private var _fragmentCameraBinding: FragmentCameraBinding? = null
-
     private val fragmentCameraBinding get() = _fragmentCameraBinding!!
+
+    private val cameraActivity: CameraActivity by lazy { activity as CameraActivity }
 
     /** AndroidX navigation arguments */
     private val args: CameraFragmentArgs by navArgs()
@@ -147,14 +147,9 @@ class CameraFragment : Fragment(), SensorEventListener, NavArgs {
     private val systemService: SensorManager by lazy { requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager }
     private val sensorAccelerometer: Sensor by lazy { systemService.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
 
-    //    private var angleFlag: Boolean = false   // 用于标志bottom和top按钮是否处于点击状态，以防两个按钮同时点击
-//    private var bottomValue: String = ""    // 存储树底倾角值
-//    private var topValue: String = ""   // 存储树高倾角值
-    private var angleValue: String = ""
+    private var phoneAngleValue: String = ""
 
-    override
-
-    fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
         Log.i("camera2", "CameraFragment onCreateView()")
@@ -214,31 +209,6 @@ class CameraFragment : Fragment(), SensorEventListener, NavArgs {
             })
         }
 
-//        fragmentCameraBinding.btnAngle.setOnClickListener {
-//            if (!angleFlag) {
-//                angleFlag = true
-//                systemService.registerListener(
-//                    this, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL
-//                )
-//            } else {
-//                systemService.unregisterListener(this)
-//                angleValue = fragmentCameraBinding.btnAngle.text.toString()
-//                angleFlag = false
-//            }
-//        }
-
-//        fragmentCameraBinding.btnTopAngle?.setOnClickListener {
-//            if (flag == "") {
-//                flag = "top"
-//                systemService.registerListener(
-//                    this, sensorAccelerometer, SensorManager.SENSOR_DELAY_NORMAL
-//                )
-//            } else if (flag == "top") {
-//                systemService.unregisterListener(this)
-//                topValue = fragmentCameraBinding.btnTopAngle.text.toString()
-//                flag = ""
-//            }
-//        }
     }
 
     /**
@@ -276,18 +246,13 @@ class CameraFragment : Fragment(), SensorEventListener, NavArgs {
         // 这将继续尽可能频繁地发送捕获请求，直到会话被删除或session.stopRepeating()被调用
         session.setRepeatingRequest(captureRequest.build(), null, cameraHandler)
 
+
         // Listen to the capture button
         fragmentCameraBinding.captureButton.setOnClickListener {
 
-//            // 若未完成角度测量，不触发点击事件
-//            if (angleValue == "") {
-//                Toast.makeText(activity, "请先完成角度测量", Toast.LENGTH_SHORT).show()
-//                return@setOnClickListener
-//            }
             //获取角度值
 //            systemService.unregisterListener(this)
-            angleValue = fragmentCameraBinding.textAngleValue.text.toString()
-
+//            angleValue = fragmentCameraBinding.textAngleValue.text.toString()
 
             // Disable click listener to prevent multiple requests simultaneously in flight  预防多次点击
             it.isEnabled = false
@@ -313,16 +278,51 @@ class CameraFragment : Fragment(), SensorEventListener, NavArgs {
 
                     // Display the photo taken to user  展示图片给使用者
                     lifecycleScope.launch(Dispatchers.Main) {
-                        navController.navigate(
-                            CameraFragmentDirections
-                                .actionCameraFragmentToImageSave(output.absolutePath)
-                                .setOrientation(result.orientation)
-                                .setDepth(
-                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                                            result.format == ImageFormat.DEPTH_JPEG
+                        Log.d("CameraFragment",
+                            "activity.cameraType = ${cameraActivity.cameraType}")
+                        when (cameraActivity.cameraType) {
+                            /** 树高和胸径 */
+                            CameraType.TreeHeightType -> {
+                                navController.navigate(
+                                    CameraFragmentDirections
+                                        .actionCameraFragmentToImageSave(output.absolutePath)
+                                        .setOrientation(result.orientation)
+                                        .setDepth(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && result.format == ImageFormat.DEPTH_JPEG)
+                                        .setPhoneAngleValue(phoneAngleValue)
                                 )
-                                .setPhoneAngleValue(angleValue)
-                        )
+                            }
+                            /** 树冠的第一张图 */
+                            CameraType.TreeCrownType1 -> {
+                                cameraActivity.shareViewModel.apply {
+                                    phoneAngle1 = phoneAngleValue
+                                    imagePath1 = output.absolutePath
+                                    azimuth1 = "100"
+                                }
+                                navController.navigate(
+                                    CameraFragmentDirections
+                                        .actionCameraFragmentToCrownImageSaveFragment(output.absolutePath)
+                                        .setOrientation(result.orientation)
+                                        .setDepth(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && result.format == ImageFormat.DEPTH_JPEG)
+                                )
+                            }
+                            /** 树冠的第二张图 */
+                            CameraType.TreeCrownType2 -> {
+                                cameraActivity.shareViewModel.apply {
+                                    phoneAngle2 = phoneAngleValue
+                                    imagePath2 = output.absolutePath
+                                    azimuth2 = "100"
+                                }
+                                navController.navigate(
+                                    CameraFragmentDirections
+                                        .actionCameraFragmentToCrownImageSaveFragment(output.absolutePath)
+                                        .setOrientation(result.orientation)
+                                        .setDepth(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && result.format == ImageFormat.DEPTH_JPEG)
+//                                        .setPhoneAngleValue(phoneAngleValue)
+//                                        .setAzimuth("100")
+//                                        .setCrownImageNumber(args.crownImageNumber)
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -571,13 +571,16 @@ class CameraFragment : Fragment(), SensorEventListener, NavArgs {
     }
 
     /** 传感器变化事件 */
+    @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent) {
         val values = event.values
         val z = values[2]
         when (event.sensor.type) {
             Sensor.TYPE_ACCELEROMETER -> {
-                fragmentCameraBinding.textAngleValue.text =
-                    String.format("%.2f", Math.acos(z / 10.0) * 180 / Math.PI) + "°"
+                /** 对加速度传感器Z轴参数取acos即可获得手机倾斜角度 */
+                phoneAngleValue = String.format("%.2f", Math.acos(z / 10.0) * 180 / Math.PI) + "°"
+                fragmentCameraBinding.textAngleValue.text = phoneAngleValue
+
 //                if (flag == "bottom")
 //                    fragmentCameraBinding.btnBottomAngle!!.text =
 //                        String.format("%.2f", Math.acos(z / 10.0) * 180 / Math.PI) + "°"
@@ -597,7 +600,6 @@ class CameraFragment : Fragment(), SensorEventListener, NavArgs {
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-//        TODO("Not yet implemented")
     }
 
     override fun onPause() {

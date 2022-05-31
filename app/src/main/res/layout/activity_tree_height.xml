@@ -15,7 +15,7 @@
 
         <ImageView
             android:id="@+id/imageTree"
-            android:layout_width="140sp"
+            android:layout_width="140dp"
             android:layout_height="180dp"
             android:layout_marginStart="@dimen/spacing_6"
             android:layout_marginTop="@dimen/spacing_10"
@@ -209,8 +209,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_6"
-        android:splitMotionEvents="false" />
+        android:layout_marginTop="@dimen/spacing_6" />
 
     <!--    <ScrollView-->
     <!--        android:layout_width="match_parent"-->

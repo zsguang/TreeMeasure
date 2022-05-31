@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(version = 1, entities = [TreeHeight::class, TreeCrown::class])
+@Database(version = 1, entities = [TreeHeight::class, TreeCrown::class], exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun treeHeightDao(): TreeHeightDao

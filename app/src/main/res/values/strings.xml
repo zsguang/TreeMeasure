@@ -33,12 +33,21 @@
     <string name="text_tree_height">树高：</string>
     <string name="text_tree_DBH">胸径：</string>
 
-    <string name="tree_crown_value">平均测量值：</string>
+    <!--  树冠Activity  -->
+    <string name="azimuth">方位角：</string>
+    <string name="tree_crown_value">树冠测量值：</string>
+    <string name="tree_crown_height">树冠高度：</string>
+    <string name="tree_crown_width">树冠宽度：</string>
+    <string name="average_height">树冠平均高度：</string>
+    <string name="average_width">树冠平均宽度：</string>
 
 
-    <!--    ImageSaveFragment    -->
+
+    <!--    HeightImageSaveFragment    -->
     <string name="btn_confirm">确  定</string>
     <string name="btn_cancel">取  消</string>
+    <string name="measure">测量</string>
+    <string name="measure_blank">测 量</string>
 
 
 </resources>

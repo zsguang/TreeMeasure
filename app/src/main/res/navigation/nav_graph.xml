@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/permissions_fragment"
-        android:name="com.example.treemeasure.fragments.PermissionsFragment"
+        android:name="com.example.treemeasure.cameras.PermissionsFragment"
         android:label="Permissions">
 
         <action
@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/selector_fragment"
-        android:name="com.example.treemeasure.fragments.SelectorFragment"
+        android:name="com.example.treemeasure.cameras.SelectorFragment"
         android:label="Selector">
 
         <action
@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/camera_fragment"
-        android:name="com.example.treemeasure.fragments.CameraFragment"
+        android:name="com.example.treemeasure.cameras.CameraFragment"
         android:label="Camera">
 
         <argument
@@ -72,39 +72,21 @@
             app:popUpToInclusive="true" />
 
         <action
-            android:id="@+id/action_camera_to_jpeg_viewer"
-            app:destination="@id/image_viewer_fragment"
-            app:launchSingleTop="true" />
-        <action
             android:id="@+id/action_camera_fragment_to_image_save"
             app:destination="@id/image_save_fragment" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/image_viewer_fragment"
-        android:name="com.example.treemeasure.fragments.ImageViewerFragment"
-        android:label="Image Viewer">
-
+        <action
+            android:id="@+id/action_camera_fragment_to_crown_image_save_fragment"
+            app:destination="@id/crown_image_save_fragment" />
         <argument
-            android:name="file_path"
+            android:name="crownImageNumber"
             app:argType="string"
-            app:nullable="false" />
+            android:defaultValue="crownImage1" />
 
-        <argument
-            android:name="orientation"
-            android:defaultValue="0"
-            app:argType="integer" />
-
-        <argument
-            android:name="depth"
-            android:defaultValue="false"
-            app:argType="boolean" />
     </fragment>
 
     <fragment
         android:id="@+id/image_save_fragment"
-        android:name="com.example.treemeasure.fragments.ImageSaveFragment"
+        android:name="com.example.treemeasure.treeHeight.HeightImageSaveFragment"
         android:label="Image Viewer"
         tools:layout="@layout/fragment_image_save">
 
@@ -129,6 +111,29 @@
             android:id="@+id/action_image_save_fragment_to_camera_fragment"
             app:destination="@id/camera_fragment" />
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/crown_image_save_fragment"
+        android:name="com.example.treemeasure.treeCrown.CrownImageSaveFragment"
+        android:label="Image Viewer"
+        tools:layout="@layout/fragment_crown_image_save"
+        >
+
+        <action
+            android:id="@+id/action_crown_image_save_fragment_to_camera_fragment"
+            app:destination="@id/camera_fragment" />
+        <argument
+            android:name="file_path"
+            app:argType="string" />
+        <argument
+            android:name="orientation"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="depth"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 
 </navigation>

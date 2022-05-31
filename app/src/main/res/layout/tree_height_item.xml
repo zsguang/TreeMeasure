@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
     android:layout_marginTop="@dimen/spacing_4"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,7 +68,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/shootingDate"
+                android:id="@+id/heightShootingDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_4"

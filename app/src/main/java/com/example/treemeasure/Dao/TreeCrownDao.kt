@@ -15,11 +15,12 @@ interface TreeCrownDao {
 //    @Query("delete from TreeCrown where imagePath = :imagePath")
 //    fun deleteByImagePath(imagePath: String): Int
 
-    @Query("delete from TreeCrown where id = :mid")
-    fun deleteById(mid: String): Int
 
     @Query("select * from TreeCrown order by id desc limit 1")
     fun getMaxId(): Int
+
+    @Query("delete from TreeCrown where id = :mid")
+    fun deleteById(mid: String): Int
 
     @Query("select * from TreeCrown")
     fun loadAllTreeCrowns(): List<TreeCrown>
